@@ -34,7 +34,7 @@ function App() {
   return (
     <div id="app">
       <aside>
-        <strong>Cadastrar</strong>
+        <strong>Cadastrar:)</strong>
         <form>
           <div className="input-block">
             <label htmlFor="github_username">Usuário do Github</label>
