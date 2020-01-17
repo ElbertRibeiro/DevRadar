@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -106,8 +106,8 @@ const style = StyleSheet.create({
 
     searchForm: {
         position: 'absolute',
-        bottom: 20,
-        left:20,
+        top: 20,
+        left: 20,
         right: 20,
         zIndex: 5,
         flexDirection: 'row',
@@ -116,7 +116,7 @@ const style = StyleSheet.create({
     searchInput: {
         flex: 1,
         height: 50,
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         color: '#333',
         borderRadius: 25,
         paddingHorizontal: 20,
