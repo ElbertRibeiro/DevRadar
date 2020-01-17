@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Me da um beijo</Text>
+      <Text>Hello Oministack!!!!</Text>
     </View>
   );
 }
