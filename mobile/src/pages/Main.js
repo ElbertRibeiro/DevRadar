@@ -4,8 +4,11 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
 
+import api from '../services/api';
+
 function Main({ navigation }) {
     const [currentRegion, setCurrentRegion] = useState(null);
+    const [devs, setDevs] = useState([]);
 
     useEffect(() => {
         async function loadInitialPosition(){
@@ -32,13 +35,32 @@ function Main({ navigation }) {
         loadInitialPosition();
     }, []);
 
+    async function loadDevs() {
+        const { latitude, longitude } = currentRegion;
+
+        const response = await api.get('/search', {
+            params: {
+                latitude,
+                longitude,
+                techs: 'ReactJS'
+            }
+        });
+
+        setDevs(response.data);
+
+    }
+
+    function handleRegionChanged(region){
+        setCurrentRegion(region);
+    }
+
     if (!currentRegion){
         return null;
     }
 
     return (
         <>
-    <MapView initialRegion={currentRegion} style={style.map}>
+    <MapView onRegionChangeComplete={handleRegionChanged} initialRegion={currentRegion} style={style.map}>
         <Marker coordinate={{ latitude: -27.5975054, longitude: -48.6489143 }}>
             <Image style={style.avatar} source={{ uri: 'https://avatars0.githubusercontent.com/u/45343415?s=460&v=4' }} />
             <Callout onPress={() => {
@@ -64,7 +86,7 @@ function Main({ navigation }) {
         />
 
 
-        <TouchableOpacity onPress={() => {}} style={style.loadButton}>
+        <TouchableOpacity onPress={loadDevs} style={style.loadButton}>
             <MaterialIcons name="my-location" size={20} color="#fff" />
         </TouchableOpacity>
     </View>
