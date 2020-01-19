@@ -9,6 +9,7 @@ import api from '../services/api';
 function Main({ navigation }) {
     const [currentRegion, setCurrentRegion] = useState(null);
     const [devs, setDevs] = useState([]);
+    const [techs, setTechs] = useState('');
 
     useEffect(() => {
         async function loadInitialPosition(){
@@ -42,11 +43,11 @@ function Main({ navigation }) {
             params: {
                 latitude,
                 longitude,
-                techs: 'ReactJS'
+                techs
             }
         });
 
-        setDevs(response.data);
+        setDevs(response.data.devs);
 
     }
 
@@ -60,21 +61,33 @@ function Main({ navigation }) {
 
     return (
         <>
-    <MapView onRegionChangeComplete={handleRegionChanged} initialRegion={currentRegion} style={style.map}>
-        <Marker coordinate={{ latitude: -27.5975054, longitude: -48.6489143 }}>
-            <Image style={style.avatar} source={{ uri: 'https://avatars0.githubusercontent.com/u/45343415?s=460&v=4' }} />
+    <MapView 
+        onRegionChangeComplete={handleRegionChanged} 
+        initialRegion={currentRegion} 
+        style={style.map}>
+        
+        {devs.map(dev =>  (
+        <Marker 
+            key={dev._id}
+            coordinate={{ 
+                latitude: dev.location.coordinate[0],
+                longitude: dev.location.coordinate[1], 
+                }}>
+            <Image 
+                style={style.avatar} 
+                source={{ uri: dev.avatar_url }} />
             <Callout onPress={() => {
-                navigation.navigate('Profile', { github_username: 'ElbertRibeiro' })
+                navigation.navigate('Profile', { github_username: dev.github_username })
             }}>
                 <View style={style.callout}>
-                    <Text style={style.devName}>Elbert Ribeiro</Text>
-                    <Text style={style.devBio}>Estudante de Engenharia de Computação e Técnico em Informática.</Text>
-                    <Text style={style.devTechs}>Python, Js</Text>
-
+                    <Text style={style.devName}>{dev.name}</Text>
+                    <Text style={style.devBio}>{dev.bio}</Text>
+                    <Text style={style.devTechs}>{dev.techs.join(', ')}</Text>
                 </View>
             </Callout>
 
         </Marker>
+        ))}
     </MapView> 
     <View style={style.searchForm}>
         <TextInput 
@@ -83,9 +96,9 @@ function Main({ navigation }) {
             placeholderTextColor="#999"
             autoCapitalize="words"
             autoCorrect={false}
+            value={techs}
+            onChangeText={setTechs}
         />
-
-
         <TouchableOpacity onPress={loadDevs} style={style.loadButton}>
             <MaterialIcons name="my-location" size={20} color="#fff" />
         </TouchableOpacity>
